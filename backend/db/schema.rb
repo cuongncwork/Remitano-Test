@@ -20,23 +20,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_15_060419) do
 
   create_table "videos", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "url"
-    t.bigint "users_id", null: false
+    t.string "title"
+    t.text "description"
+    t.text "embed_html"
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["users_id"], name: "index_videos_on_users_id"
+    t.index ["user_id"], name: "index_videos_on_user_id"
   end
 
   create_table "votes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "vote_type", limit: 1
-    t.bigint "videos_id", null: false
-    t.bigint "users_id", null: false
+    t.bigint "video_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["users_id"], name: "index_votes_on_users_id"
-    t.index ["videos_id"], name: "index_votes_on_videos_id"
+    t.index ["user_id"], name: "index_votes_on_user_id"
+    t.index ["video_id"], name: "index_votes_on_video_id"
   end
 
-  add_foreign_key "videos", "users", column: "users_id"
-  add_foreign_key "votes", "users", column: "users_id"
-  add_foreign_key "votes", "videos", column: "videos_id"
+  add_foreign_key "videos", "users"
+  add_foreign_key "votes", "users"
+  add_foreign_key "votes", "videos"
 end

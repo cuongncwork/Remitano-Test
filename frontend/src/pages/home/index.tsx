@@ -1,31 +1,43 @@
 import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
-import { StateProp } from '../../types';
+import { StateProp, User, Video } from '../../types';
 import { Col, Container, Row } from 'react-bootstrap';
 import { Dispatch } from 'redux';
+import './style.scss';
 
-const FAKE_DATA = [
-  {
-    url: 'https://youtu.be/bxG8DPeECqM',
-    title: 'Test',
-    description: 'test',
-    upVote: 12,
-    downVote: 20,
-  },
-];
-
-type HomeProps = {};
+type HomeProps = {
+  loading: boolean;
+  videos: Video[];
+  user: User;
+};
 
 const Home: FunctionComponent<HomeProps> = (props) => {
+  const { loading, videos, user } = props;
+
   return (
     <Container>
-      {FAKE_DATA.map((data) => {
-        const { url, title, description, upVote, downVote } = data;
+      {videos.map((video) => {
+        const { id, url, title, description, embed_html, user, votes } = video;
 
         return (
-          <Row>
-            <Col sm={12} md={5} className='movie-video'></Col>
-            <Col sm={12} md={7}></Col>
+          <Row key={id} className="mt-3 movie-item-container">
+            <Col sm={12} md={5} className="movie-video">
+              <div dangerouslySetInnerHTML={{ __html: embed_html }} />
+            </Col>
+            <Col sm={12} md={7}>
+              <div>
+                <div>
+                  <div className="movie-title">{title}</div>
+                  <div className="movie-shared-by">
+                    <strong>Shared by:</strong> {user.email}
+                  </div>
+                  <div className="movie-vote"></div>
+                </div>
+                <div></div>
+              </div>
+              <div className="movie-description-title">Description:</div>
+              <div className="movie-description-content">{description}</div>
+            </Col>
           </Row>
         );
       })}
@@ -33,7 +45,11 @@ const Home: FunctionComponent<HomeProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: StateProp) => ({});
+const mapStateToProps = (state: StateProp) => ({
+  loading: state.home.loading,
+  videos: state.home.videos,
+  user: state.auth.user,
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({});
 

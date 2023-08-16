@@ -1,10 +1,18 @@
 export type User = {
+  id: number;
   email: string;
+};
+
+export type Vote = {
+  id: number;
+  vote_type: number;
+  user_id: number;
+  video_id: number;
 };
 
 export type StateProp = {
   auth: { isLoggedIn: boolean; user: User };
-  home: { videos: Videos[] };
+  home: { videos: Video[]; loading: boolean; error: string };
 };
 
 export type LoginParams = {
@@ -12,8 +20,20 @@ export type LoginParams = {
   password: string;
 };
 
-export type Videos = {
+export type ShareParams = {
+  video: { url: string; user_id: number };
+};
+
+export type VoteParams = {
+  vote: { id: number; vote_type: number; video_id: number; user_id: number };
+};
+
+export type Video = {
   id: number;
-  title: number;
   url: string;
+  title: string;
+  description: string;
+  embed_html: string;
+  user: User;
+  votes: Vote[];
 };

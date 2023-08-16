@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import Cookies from 'js-cookie';
-import { LoginParams } from '../../types';
+import { LoginParams, ShareParams, VoteParams } from '../../types';
 
 class ApiService {
   BASE_URL = 'http://localhost:3000';
@@ -55,8 +55,23 @@ class ApiService {
     return response.data;
   };
 
-  shareVideo = async () => {
-    const response = await this.INSTANCE.post('videos');
+  shareVideo = async (params: ShareParams) => {
+    const response = await this.INSTANCE.post('videos', params);
+    return response.data;
+  };
+
+  vote = async (method: string, params: VoteParams) => {
+    let response;
+    if (method === 'post') {
+      response = await this.INSTANCE.post('votes', params);
+    } else {
+      response = await this.INSTANCE.put(`votes/${params.vote.id}`, params);
+    }
+    return response.data;
+  };
+
+  removeVote = async (id: number) => {
+    const response = await this.INSTANCE.delete(`votes/${id}`);
     return response.data;
   };
 }

@@ -1,5 +1,8 @@
 class Video < ApplicationRecord
-  belongs_to :users
+  belongs_to :user
+  has_many :votes, dependent: :destroy
 
-  validates :url, presence: { message: "Youtube URL required" }, format: { with: /^http[s]*:\/\/[www\.]*youtu[.]{1}*be[.com]{4}*\/[watch\?v=]*([a-zA-Z0-9_-]*)/, message: "Youtube URL invalid" }
+  YOUTUBE_URL_REGEX = /(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+
+  validates :url, presence: { message: "Youtube URL required" }, format: { with: YOUTUBE_URL_REGEX, message: "Youtube URL invalid" }
 end

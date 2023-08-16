@@ -2,7 +2,7 @@ import { all, takeLatest } from 'redux-saga/effects';
 import { HomeTypes } from '../reducer/home';
 import { AuthTypes } from '../reducer/auth';
 import { checkLoggedIn, signIn, signOut } from './auth';
-import { getVideos } from './home';
+import { getVideos, shareVideo } from './home';
 
 const authSagas = [
   takeLatest(AuthTypes.CHECK_LOGGED_IN, checkLoggedIn),
@@ -10,7 +10,10 @@ const authSagas = [
   takeLatest(AuthTypes.SIGN_OUT, signOut),
 ];
 
-const homeSagas = [takeLatest(HomeTypes.GET_VIDEOS, getVideos)];
+const homeSagas = [
+  takeLatest(HomeTypes.GET_VIDEOS, getVideos),
+  takeLatest(HomeTypes.SHARE_VIDEO, shareVideo),
+];
 
 export default function* root() {
   yield all([...homeSagas, ...authSagas]);

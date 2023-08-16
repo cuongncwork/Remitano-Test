@@ -1,11 +1,13 @@
 import { call, put } from 'redux-saga/effects';
 import API from '../../../../services/api';
 import { HomeTypes } from '../../reducer/home';
-import { Videos } from '../../../../../types';
+import { ShareParams, Video } from '../../../../../types';
+import { toast } from 'react-toastify';
+import { NavigateFunction } from 'react-router';
 
 export function* getVideos() {
   try {
-    const videos: Videos[] = yield call(API.getVideos);
+    const videos: Video[] = yield call(API.getVideos);
     yield put({
       type: HomeTypes.GET_VIDEOS_SUCCESS,
       videos,
@@ -14,6 +16,31 @@ export function* getVideos() {
     yield put({
       type: HomeTypes.GET_VIDEOS_FAILURE,
       error: { error: ex?.message || 'Get videos error' },
+    });
+  }
+}
+
+export function* shareVideo({
+  params,
+  callback,
+  type,
+}: {
+  params: ShareParams;
+  callback: () => void;
+  type: string;
+}) {
+  try {
+    const video: Video = yield call(API.shareVideo, params);
+    yield put({
+      type: HomeTypes.SHARE_VIDEO_SUCCESS,
+      video,
+    });
+    toast.success('Share movie successfully');
+    callback();
+  } catch (ex: any) {
+    yield put({
+      type: HomeTypes.SHARE_VIDEO_FAILURE,
+      error: { error: ex?.message || 'Share video error' },
     });
   }
 }
