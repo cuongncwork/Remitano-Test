@@ -48,5 +48,6 @@ export function* signIn({ params, type }: { params: LoginParams; type: string })
 
 export function* signOut() {
   yield put({ type: AuthTypes.SIGN_OUT_SUCCESS });
+  API.removeAuthorizationHeader();
   Cookies.remove('token');
 }

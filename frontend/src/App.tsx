@@ -12,10 +12,11 @@ import { HomeActions } from './core/adapters/redux/reducer/home';
 type AppProps = {
   isLoggedIn: boolean;
   user: User;
+  error: string;
 };
 
 const App: FunctionComponent<AppProps> = (props) => {
-  const { isLoggedIn, user } = props;
+  const { isLoggedIn, user, error } = props;
 
   const dispatch = useDispatch();
 
@@ -50,14 +51,18 @@ const App: FunctionComponent<AppProps> = (props) => {
     }
 
     return () => consumer.disconnect();
-  }, [isLoggedIn]);
+  }, [isLoggedIn, dispatch, user]);
+
+  useEffect(() => {
+    if (error) toast.error(error);
+  }, [error]);
 
   return (
     <>
       <BrowserRouter>
         <Routing />
       </BrowserRouter>
-      <ToastContainer autoClose={2000} />
+      <ToastContainer autoClose={2000} pauseOnHover={true} />
     </>
   );
 };
@@ -65,6 +70,7 @@ const App: FunctionComponent<AppProps> = (props) => {
 const mapStateToProps = (state: StateProp) => ({
   isLoggedIn: state.auth.isLoggedIn,
   user: state.auth.user,
+  error: state.home.error,
 });
 
 export default connect(mapStateToProps)(App);

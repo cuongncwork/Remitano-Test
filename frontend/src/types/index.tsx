@@ -25,7 +25,7 @@ export type ShareParams = {
 };
 
 export type VoteParams = {
-  vote: { id: number; vote_type: number; video_id: number; user_id: number };
+  vote: { id?: number; vote_type: number; video_id: number; user_id: number };
 };
 
 export type Video = {

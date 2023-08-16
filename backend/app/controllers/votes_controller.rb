@@ -1,5 +1,5 @@
 class VotesController < ApplicationController
-  before_action :get_vote, only: [:update, :destory]
+  before_action :get_vote, only: :destroy
 
   def create
     vote = Vote.new vote_params
@@ -7,14 +7,6 @@ class VotesController < ApplicationController
       render json: vote
     else
       render json: { message: vote.errors.full_messages.to_sentence }, status: 400
-    end
-  end
-
-  def update
-    if @vote.save
-      render json: @vote
-    else
-      render json: { message: @vote.errors.full_messages.to_sentence }, status: 400
     end
   end
 
@@ -31,10 +23,6 @@ class VotesController < ApplicationController
 
   def vote_params
     params.require(:vote).permit :user_id, :vote_type, :video_id
-  end
-
-  def vote_update_params
-    params.require(:vote).permit :vote_type
   end
 
   def get_vote

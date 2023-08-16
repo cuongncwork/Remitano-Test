@@ -10,6 +10,14 @@ const { Types, Creators } = createActions({
   shareVideo: ['params', 'callback'],
   shareVideoSuccess: ['video'],
   shareVideoFailure: ['error'],
+
+  voteVideo: ['params'],
+  voteVideoSuccess: ['video'],
+  voteVideoFailure: ['error'],
+
+  removeVoteVideo: ['vote'],
+  removeVoteVideoSuccess: ['video'],
+  removeVoteVideoFailure: ['error'],
 });
 
 export const INITIAL_STATE = Immutable<{ loading: boolean; videos: Video[]; error: string }>({
@@ -26,12 +34,16 @@ const getVideosSuccess = (state = INITIAL_STATE, { videos }: { videos: Video[] }
 const sendRequestFailure = (state = INITIAL_STATE, { error }: { error: string }) =>
   state.set('loading', false).set('error', error);
 
-const shareVideoSuccess = (
-  state = INITIAL_STATE,
-  { video }: { video: ImmutableObject<Video> },
-) => {
+const shareVideoSuccess = (state = INITIAL_STATE, { video }: { video: ImmutableObject<Video> }) => {
   const videos = state.videos.asMutable();
   videos.unshift(video);
+  return state.set('loading', false).set('videos', videos);
+};
+
+const voteVideoSuccess = (state = INITIAL_STATE, { video }: { video: ImmutableObject<Video> }) => {
+  const videos = state.videos.asMutable();
+  const index = videos.findIndex((v) => v.id === video.id);
+  videos[index] = video;
   return state.set('loading', false).set('videos', videos);
 };
 
@@ -45,6 +57,14 @@ export const homeReducer = createReducer(INITIAL_STATE, {
   [Types.SHARE_VIDEO]: sendRequest,
   [Types.SHARE_VIDEO_SUCCESS]: shareVideoSuccess,
   [Types.SHARE_VIDEO_FAILURE]: sendRequestFailure,
+
+  [Types.VOTE_VIDEO]: sendRequest,
+  [Types.VOTE_VIDEO_SUCCESS]: voteVideoSuccess,
+  [Types.VOTE_VIDEO_FAILURE]: sendRequestFailure,
+
+  [Types.REMOVE_VOTE_VIDEO]: sendRequest,
+  [Types.REMOVE_VOTE_VIDEO_SUCCESS]: voteVideoSuccess,
+  [Types.REMOVE_VOTE_VIDEO_FAILURE]: sendRequestFailure,
 });
 
 export const HomeActions = Creators;

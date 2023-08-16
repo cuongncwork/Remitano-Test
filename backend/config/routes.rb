@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   resources :videos, only: [:index, :create]
 
-  resources :votes, only: [:create, :update, :destroy]
+  resources :votes, only: [:create, :destroy]
 
   mount ActionCable.server => "/cable"
 end
