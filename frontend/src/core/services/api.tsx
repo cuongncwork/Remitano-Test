@@ -39,11 +39,15 @@ class ApiService {
 
   login = async (params: LoginParams) => {
     const response = await this.INSTANCE.post('login', params);
-    console.log('Debug ~ file: api.tsx:42 ~ ApiService ~ login= ~ response:', response);
     const { token } = response.data;
     Cookies.set('token', token);
     this.addAuthorizationHeader(token);
     return token;
+  };
+
+  getUser = async () => {
+    const response = await this.INSTANCE.get('get_user');
+    return response.data;
   };
 
   getVideos = async () => {

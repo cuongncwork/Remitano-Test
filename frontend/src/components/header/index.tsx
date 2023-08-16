@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import './style.scss';
-import { LoginParams, StateProp } from '../../types';
+import { LoginParams, StateProp, User } from '../../types';
 import { Button, Container, Form, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import * as Icon from 'react-bootstrap-icons';
@@ -11,12 +11,13 @@ import { useForm } from 'react-hook-form';
 
 type HeaderProps = {
   isLoggedIn: boolean;
+  user?: User;
   signIn: (params: LoginParams) => void;
   signOut: () => void;
 };
 
 const Header: FunctionComponent<HeaderProps> = (props) => {
-  const { isLoggedIn, signIn, signOut } = props;
+  const { isLoggedIn, user, signIn, signOut } = props;
 
   const initState = {
     email: '',
@@ -51,7 +52,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
           <Nav>
             {isLoggedIn ? (
               <div className="d-flex align-items-center">
-                <span className="me-3">Welcome: cuongnc.dev@gmail.com</span>
+                <span className="me-3">Welcome: {user?.email}</span>
                 <Link to={'share'}>
                   <Button
                     variant="primary"
@@ -77,7 +78,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
                       required: 'Email required',
                       pattern: {
                         value: /\S+@\S+\.\S+/,
-                        message: 'Invalid email format',
+                        message: 'Email format invalid',
                       },
                     })}
                   />
@@ -121,6 +122,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
 
 const mapStateToProps = (state: StateProp) => ({
   isLoggedIn: state.auth.isLoggedIn,
+  user: state.auth.user,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

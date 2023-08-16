@@ -39,8 +39,8 @@ en:
               blank: "is required"
             password:
               blank: "is required"
-              to_long: "%{count} characters is the maximum allowed"
-              too_short: "%{count} characters is the minimum allowed"
+              to_long: "up to %{count} characters"
+              too_short: "at least %{count} characters"
   activemodel:
     errors:
       models:

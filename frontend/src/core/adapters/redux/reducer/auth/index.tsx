@@ -1,5 +1,6 @@
 import { createActions, createReducer } from 'reduxsauce';
 import Immutable from 'seamless-immutable';
+import { User } from '../../../../../types';
 
 const { Types, Creators } = createActions({
   checkLoggedIn: [],
@@ -10,20 +11,22 @@ const { Types, Creators } = createActions({
   signInFailure: ['error'],
 
   signOut: [],
+  signOutSuccess: [],
 });
 
 export const INITIAL_STATE = Immutable({
   error: null,
   isProcessing: false,
   isLoggedIn: false,
+  user: null,
 });
 
 const checkLoggedIn = (state = INITIAL_STATE) => state;
 
 const checkLoggedInSuccess = (
   state = INITIAL_STATE,
-  { payload }: { payload: { isLoggedIn: boolean } },
-) => state.set('isLoggedIn', payload.isLoggedIn);
+  { isLoggedIn, user }: { isLoggedIn: boolean; user: User },
+) => state.set('isLoggedIn', isLoggedIn).set('user', user);
 
 const requestAuth = (state = INITIAL_STATE) => {
   return state.set('isProcessing', true).set('error', null);
@@ -31,20 +34,23 @@ const requestAuth = (state = INITIAL_STATE) => {
 
 const requestAuthSuccess = (
   state = INITIAL_STATE,
-  { payload }: { payload: { isLoggedIn: boolean } },
+  { isLoggedIn, user }: { isLoggedIn: boolean; user: User },
 ) => {
   const nextState = state
-    .set('isLoggedIn', payload.isLoggedIn)
+    .set('isLoggedIn', isLoggedIn)
+    .set('user', user)
     .set('error', null)
     .set('isProcessing', false);
   return nextState;
 };
 
-const requestAuthFailure = (state = INITIAL_STATE, { payload }: { payload: { error: string } }) => {
-  return state.set('error', payload.error).set('isProcessing', false);
+const requestAuthFailure = (state = INITIAL_STATE, { error }: { error: string }) => {
+  return state.set('error', error).set('isProcessing', false);
 };
 
 const signOut = (state = INITIAL_STATE) => state;
+
+const signOutSuccess = (state = INITIAL_STATE) => INITIAL_STATE;
 
 export const AuthTypes = Types;
 
@@ -55,6 +61,7 @@ export const authReducer = createReducer(INITIAL_STATE, {
   [Types.SIGN_IN_SUCCESS]: requestAuthSuccess,
   [Types.SIGN_IN_FAILURE]: requestAuthFailure,
   [Types.SIGN_OUT]: signOut,
+  [Types.SIGN_OUT_SUCCESS]: signOutSuccess,
 });
 
 export const AuthActions = Creators;

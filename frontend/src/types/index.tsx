@@ -1,5 +1,9 @@
+export type User = {
+  email: string;
+};
+
 export type StateProp = {
-  auth: { isLoggedIn: boolean };
+  auth: { isLoggedIn: boolean; user: User };
   home: { videos: Videos[] };
 };
 
