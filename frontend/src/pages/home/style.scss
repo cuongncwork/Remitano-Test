@@ -12,7 +12,10 @@
     font-size: 18px;
   }
 
-  .movie-vote {
+  .movie-video {
+    iframe {
+      width: 100%;
+    }
   }
 
   .movie-description-title {

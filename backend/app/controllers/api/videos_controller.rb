@@ -1,4 +1,4 @@
-class VideosController < ApplicationController
+class Api::VideosController < ApplicationController
   skip_before_action :authenticate_request, only: :index
   before_action :check_url, only: :create
 

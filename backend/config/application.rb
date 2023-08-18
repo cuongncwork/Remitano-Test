@@ -26,8 +26,8 @@ module Backend
     config.api_only = true
 
     config.cache_store = :redis_store, {
-      host: $REDIS_HOST,
-      port: $REDIS_PORT,
+      host: ENV["REDIS_HOST"],
+      port: ENV["REDIS_PORT"],
       db: 0,
     }, { expires_in: 1.days }
   end

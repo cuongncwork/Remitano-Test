@@ -11,7 +11,7 @@ export type Vote = {
 };
 
 export type StateProp = {
-  auth: { isLoggedIn: boolean; user: User };
+  auth: { isLoggedIn: boolean; user: User; isProcessing: boolean };
   home: { videos: Video[]; loading: boolean; error: string };
 };
 

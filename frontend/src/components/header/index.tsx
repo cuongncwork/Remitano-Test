@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import './style.scss';
 import { LoginParams, StateProp, User } from '../../types';
-import { Button, Container, Form, Nav, Navbar } from 'react-bootstrap';
+import { Button, Col, Container, Form, Nav, Navbar, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import * as Icon from 'react-bootstrap-icons';
 import { AuthActions } from '../../core/adapters/redux/reducer/auth';
@@ -14,10 +14,11 @@ type HeaderProps = {
   user?: User;
   signIn: (params: LoginParams) => void;
   signOut: () => void;
+  isProcessing: boolean;
 };
 
 const Header: FunctionComponent<HeaderProps> = (props) => {
-  const { isLoggedIn, user, signIn, signOut } = props;
+  const { isLoggedIn, user, signIn, signOut, isProcessing } = props;
 
   const initState = {
     email: '',
@@ -51,24 +52,28 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
           <Nav className="me-auto"></Nav>
           <Nav>
             {isLoggedIn ? (
-              <div className="d-flex align-items-center">
-                <span className="me-3">Welcome: {user?.email}</span>
-                <Link to={'share'}>
+              <Row className="d-flex align-items-center">
+                <Col sm={12} md={12} lg={6} className="text-right mb-sm-2 mb-lg-0">
+                  <span className="text-nowrap">Welcome: {user?.email}</span>
+                </Col>
+                <Col sm={12} md={12} lg={6} className="text-right">
+                  <Link to={'share'}>
+                    <Button
+                      variant="primary"
+                      className="text-nowrap header-button logout-button me-3"
+                    >
+                      Share a movie
+                    </Button>
+                  </Link>
                   <Button
-                    variant="primary"
-                    className="text-nowrap header-button logout-button me-3"
+                    variant="secondary"
+                    className="text-nowrap header-button logout-button"
+                    onClick={signOut}
                   >
-                    Share a movie
+                    Logout
                   </Button>
-                </Link>
-                <Button
-                  variant="secondary"
-                  className="text-nowrap header-button logout-button"
-                  onClick={signOut}
-                >
-                  Logout
-                </Button>
-              </div>
+                </Col>
+              </Row>
             ) : (
               <Form className="d-flex align-items-start" onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group className="me-2" controlId="formBasicEmail">
@@ -108,6 +113,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
                   type="submit"
                   variant="primary"
                   className="text-nowrap header-button login-register-button"
+                  disabled={isProcessing}
                 >
                   Login / Register
                 </Button>
@@ -123,6 +129,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
 const mapStateToProps = (state: StateProp) => ({
   isLoggedIn: state.auth.isLoggedIn,
   user: state.auth.user,
+  isProcessing: state.auth.isProcessing,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

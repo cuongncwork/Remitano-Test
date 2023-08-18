@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { ShareParams, StateProp, User } from '../../types';
 import { Dispatch } from 'redux';
-import { NavigateFunction, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import './style.scss';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
@@ -12,10 +12,11 @@ type ShareProps = {
   isLoggedIn: boolean;
   user: User;
   shareVideo: (params: ShareParams, callback: () => void) => void;
+  loading: boolean;
 };
 
 const Share: FunctionComponent<ShareProps> = (props) => {
-  const { isLoggedIn, user, shareVideo } = props;
+  const { isLoggedIn, user, shareVideo, loading } = props;
 
   const navigate = useNavigate();
 
@@ -57,11 +58,12 @@ const Share: FunctionComponent<ShareProps> = (props) => {
                 <Col sm="8" md="9">
                   <Form.Control
                     type="text"
+                    readOnly={loading}
                     {...register('url', {
                       required: 'URL required',
                       pattern: {
                         value:
-                          /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|live\/|v\/)?)([\w\-]+)(\S+)?$/,
+                          /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w]+\?v=|embed\/|live\/|v\/)?)([\w]+)(\S+)?$/,
                         message: 'Youtube URL invalid',
                       },
                     })}
@@ -78,6 +80,7 @@ const Share: FunctionComponent<ShareProps> = (props) => {
                   type="submit"
                   variant="primary"
                   className="text-nowrap header-button login-register-button"
+                  disabled={loading}
                 >
                   Share
                 </Button>
@@ -93,6 +96,7 @@ const Share: FunctionComponent<ShareProps> = (props) => {
 const mapStateToProps = (state: StateProp) => ({
   isLoggedIn: state.auth.isLoggedIn,
   user: state.auth.user,
+  loading: state.home.loading,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

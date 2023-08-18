@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { LoginParams, ShareParams, VoteParams } from '../../types';
 
 class ApiService {
-  BASE_URL = 'http://localhost:3000';
+  BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   TIMEOUT = 20000;
 
