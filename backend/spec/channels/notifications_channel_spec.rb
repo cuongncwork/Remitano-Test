@@ -1,5 +1,15 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe NotificationsChannel, type: :channel do
-  pending "add some examples to (or delete) #{__FILE__}"
+  before do
+    stub_connection
+  end
+
+  it "subscribes to a stream" do
+    subscribe
+
+    expect(subscription).to be_confirmed
+    expect(subscription).to have_stream_from("share_video_notification")
+    expect(subscription).to have_stream_for("share_video_notification")
+  end
 end

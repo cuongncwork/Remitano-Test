@@ -11,18 +11,10 @@ class Api::VideosController < ApplicationController
     video = Video.new video_params
 
     if video.save
-      NotificationBroadcastJob.perform_later({ url: params[:video][:url],
-                                               title: @title,
-                                               description: @description,
-                                               embed_html: @embed_html,
-                                               user: { id: current_user.id, email: current_user.email },
-                                               votes: [] })
       render json: video
     else
       render json: { message: video.errors.full_messages.to_sentence }, status: 400
     end
-  rescue Yt::Errors::NoItems
-    render json: { message: "Youtube video not found" }, status: 404
   end
 
   private
