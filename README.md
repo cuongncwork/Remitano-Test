@@ -1,46 +1,98 @@
-# Getting Started with Create React App
+# Youtube Video Sharing App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Introduction
 
-## Available Scripts
+1. This project is a small web app for sharing YouTube videos.
+   - User can view all shared videos without login.
+   - User need to login if they want to share a youtube video or vote a video.
 
-In the project directory, you can run:
+2. Key features:
+   - User registration and login
+   - Sharing YouTube videos
+   - Viewing a list of shared videos
+   - Vote a shared video
+   - Real-time notifications for new video shares: When a user shares a new video, other logged-in users should receive a real-time notification about the newly shared video. This notification can be displayed as a pop-up or a banner in the application, and it should contain the video title and the name of the user who shared it.
 
-### `npm start`
+3. Demo: Visit the page: http://34.173.54.45/
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Prerequisites
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Backend
 
-### `npm test`
+  |   Ruby   |   Rails  |   MySQL  |   Redis  |
+  | :------: | :------: | :------: | :------: |
+  |   3.2.2  |   7.0.7  |   8.1.0  |   7.2.0  |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Frontend
 
-### `npm run build`
+  |    ReactJS    | React Bootstrap |
+  | :-----------: | :-------------: |
+  |     18.2.0    |      2.8.0      |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Cross-platform: This project using Docker for development, so you can run this project anywhere.**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Installation & Configuration
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Install and Run Docker Desktop: https://docs.docker.com/get-docker/
+2. Clone repository: https://github.com/cuongncwork/Remitano-Test
+3. In the root folder of project, add .env file with content below:
 
-### `npm run eject`
+```
+  REACT_APP_BACKEND_URL=http://localhost:3000/api
+  REACT_APP_BACKEND_CABLE_URL=ws:localhost:3000/cable
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  RAILS_ENV=development
+  MYSQL_USERNAME=root
+  MYSQL_PASSWORD=root@123
+  MYSQL_HOST=db
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  REDIS_HOST=redis
+  REDIS_PORT=6379
+  REDIS_URL=redis://redis:6379/0
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+4. Open Terminal, go to project, then run command:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+  docker volume create mysql-data-volume
+```
+```
+  docker compose up --build
+```
 
-## Learn More
+5. After build successfully, run commands:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+  docker compose run backend rails db:create
+```
+```
+  docker compose run backend rails db:migrate
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+6. Open [http://localhost:3001](http://localhost:3001) to view project in the browser.
+
+## Usage
+
+1. View list shared videos
+   - When user open website, list all shared videos will show. User can see all shared videos without login.
+
+2. User login & registration:
+   - Login form in the header of website, include Email field and Password field
+   - If the email does not exist in database, the user will be automatically registered and logged in based on the email and password entered.
+
+3. Share a movie
+   - Once logged in, click button "Share a movie" on top-right, website will navigate to share page.
+   - Enter Youtube URL to Youtube URL input, then click Share.
+   - Backend will check the validity of the URL you just entered. If the URL is not a valid Youtube URL, or Video is not available, an error notification will show.
+
+4. Real-Time Notifications for new video shares:
+   - When a user shares a new video, logged-in users will receive real-time notifications.
+   - Notifications will appear as pop-ups on the bottom-right within the application
+   - The notification will include the video title and the email of the user who shared it.
+
+5. Like/Dislike a Video
+   - User can click on Like/Dislike button to reaction with the video
+
+## Troubleshooting
+
+**Any issues when build Docker, please double-check the .env file with content listed in Installation & Configuration section**
