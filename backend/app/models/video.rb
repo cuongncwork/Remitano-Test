@@ -12,7 +12,8 @@ class Video < ApplicationRecord
 
   def send_notification
     user = User.find_by_id self.user_id
-    NotificationBroadcastJob.perform_later({ url: self.url,
+    NotificationBroadcastJob.perform_later({ id: self.id,
+                                             url: self.url,
                                              title: self.title,
                                              description: self.description,
                                              embed_html: self.embed_html,
