@@ -71,6 +71,14 @@
 
 6. Open [http://localhost:3001](http://localhost:3001) to view project in the browser.
 
+## Run Test
+
+- Run project with Docker, then run command:
+
+```
+  docker compose run backend rspec
+```
+
 ## Usage
 
 1. View list shared videos
