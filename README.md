@@ -13,7 +13,7 @@
    - Vote a shared video
    - Real-time notifications for new video shares: When a user shares a new video, other logged-in users should receive a real-time notification about the newly shared video. This notification can be displayed as a pop-up or a banner in the application, and it should contain the video title and the name of the user who shared it.
 
-3. Demo: Visit the page: http://34.173.54.45/
+3. Demo: Visit the page: http://35.193.116.201/
 
 ## Prerequisites
 
@@ -101,6 +101,49 @@
 5. Like/Dislike a Video
    - User can click on Like/Dislike button to reaction with the video
 
+## Deployment
+
+1. Install Docker on your server.
+2. Clone repository.
+3. In root folder of project, add .env file with content below:
+```
+  RAILS_ENV=production
+  MYSQL_USERNAME=root
+  MYSQL_PASSWORD=root@123
+  MYSQL_ROOT_PASSWORD=root@123
+  MYSQL_HOST=db
+  RAILS_LOG_TO_STDOUT=true
+  REDIS_HOST=redis
+  REDIS_PORT=6379
+  REDIS_URL=redis://redis:6379/0
+  SECRET_KEY_BASE=**contact_me**
+  RAILS_MASTER_KEY=**contact_me**
+```
+
+4. Go to frontend folder, add .env file with content below:
+```
+  REACT_APP_BACKEND_URL=http://<your_server>:3000/api
+  REACT_APP_BACKEND_CABLE_URL=ws:<your_server>:3000/cable
+```
+**Replace <your_server> with your server ip or domain**
+
+5. Run command in root project:
+```
+  docker volume create shared_volume
+```
+```
+  docker compose -f docker-compose.prod.yml up --build
+```
+
+6. After build successfully, run commands:
+```
+  docker compose -f docker-compose.prod.yml run backend rails db:create
+```
+
+```
+  docker compose -f docker-compose.prod.yml run backend rails db:migrate
+```
+
 ## Troubleshooting
 
-**Any issues when build Docker, please double-check the .env file with content listed in Installation & Configuration section**
+**Any issues when run Docker, please double-check the .env file with content listed in Installation & Configuration section and make sure you followed the steps correctly**
